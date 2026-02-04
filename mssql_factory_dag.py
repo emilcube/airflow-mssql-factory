@@ -150,8 +150,8 @@ def create_dag_from_config(config_path: Path) -> DAG:
                     ),
                     allowed_states=["success"],
                     failed_states=["failed", "skipped"],
-                    mode="poke",
-                    poke_interval=60,
+                    mode=wait_config.get("mode", "poke"),
+                    poke_interval=wait_config.get("poke_interval", 60),
                     timeout=wait_config.get("timeout", 600)
                 )
                 all_sensors.append(wait_task)
@@ -175,7 +175,7 @@ def create_dag_from_config(config_path: Path) -> DAG:
                     task_id=task_id,
                     conn_id=mssql_connection_id_str,
                     sql=sql_query,
-                    mode="poke",
+                    mode=table_config.get("mode", "poke"),
                     poke_interval=table_config.get("poke_interval", 60),
                     timeout=table_config.get("timeout", 600),
                 )
